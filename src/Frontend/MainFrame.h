@@ -764,9 +764,9 @@ public:
 
     /**
      * Moves the caret to the line in the script indicated in an error message 
-     * and brings the editor into focus.
+     * and brings the editor into focus. Returns false if the error was not found.
      */
-    void GotoError(const wxString& message);
+    bool GotoError(const wxString& message);
 
     /**
      * Opens the specified file and goes to the line.

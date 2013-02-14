@@ -2866,7 +2866,7 @@ void MainFrame::ClearBreakLineMarker()
 
 }
 
-void MainFrame::GotoError(const wxString& message)
+bool MainFrame::GotoError(const wxString& message)
 {
 
     wxString target;
@@ -2884,10 +2884,11 @@ void MainFrame::GotoError(const wxString& message)
         if (file != NULL)
         {
             GotoNewLine(file->edit, newLine - 1, true);
+			return true;
         }
 
     }
-
+	return false;
 }
 
 void MainFrame::GotoNewLine(Project::File* file, unsigned int newLine)

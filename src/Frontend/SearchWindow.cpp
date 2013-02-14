@@ -32,7 +32,7 @@ END_EVENT_TABLE()
 
 
 SearchWindow::SearchWindow(MainFrame* mainFrame, wxWindowID winid)
-    : wxTextCtrl(mainFrame, winid, _(""), wxDefaultPosition, wxSize(200,150), wxTE_MULTILINE | wxTE_READONLY | wxTE_DONTWRAP | wxTE_RICH | wxBORDER_SUNKEN)
+    : wxTextCtrl(mainFrame, winid, _(""), wxDefaultPosition, wxSize(200,150), wxTE_MULTILINE | wxTE_READONLY | wxTE_DONTWRAP | wxTE_RICH | wxBORDER_SUNKEN | wxTE_NOHIDESEL)
 {
     m_mainFrame = mainFrame;
 }
@@ -59,8 +59,12 @@ void SearchWindow::OnDoubleClick(wxMouseEvent& event)
     HitTest(event.GetPosition(), &col, &row);
 
     wxString line = GetLineText(row);
-    m_mainFrame->GotoError(line);
-
+    if (m_mainFrame->GotoError(line))
+	{
+		//Highlight the search window line, if it was valid.
+		long startSelection = XYToPosition(0,row);
+		SetSelection(startSelection,startSelection + GetLineLength(row));
+	}
 }
 
 void SearchWindow::SearchMessage(const wxString& message)
