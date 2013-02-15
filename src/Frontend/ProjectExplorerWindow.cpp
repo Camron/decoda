@@ -187,14 +187,22 @@ void ProjectExplorerWindow::OnFilterTextChanged(wxCommandEvent& event)
     
     m_filter = m_searchBox->GetValue();
 
-    // If the filter begins with a space, we'll match the text anywhere in the
+    // If the filter begins with a wildcard character (space or *), we'll match the text anywhere in the
     // the symbol name.
-    unsigned int filterLength = m_filter.Length();
-    m_filter.Trim(false);
-    m_filterMatchAnywhere = (m_filter.Length() < filterLength);
+	wxChar firstChar = m_filter.GetChar(0);
 
-    // Make the filter lowercase since matching with be case independent.
-    m_filter.MakeLower();
+	if ((firstChar==' ') || (firstChar=='*'))
+	{
+		m_filterMatchAnywhere=true;
+
+		//Instead of removing the '*' via a substring, let's just let the eventual Trim call take care of it.
+		m_filter.SetChar(0,' ');
+		m_filter.Trim(false);
+	}
+	else
+	{
+		m_filterMatchAnywhere=false;
+	}
     
     Rebuild();
 
